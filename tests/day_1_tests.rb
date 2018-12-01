@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require_relative '../day_1'
 
 class Day1Test < Minitest::Test
-  def test_frequency
+  def test_total_frequency
     examples = [
       {
         input: [+1, -2, +3, +1],
@@ -23,7 +23,7 @@ class Day1Test < Minitest::Test
     ]
 
     examples.each do |example|
-      assert_equal example[:output], Calibrator.new.frequency(example[:input])
+      assert_equal example[:output], Calibrator.new.total_frequency(example[:input])
     end
   end
 end
