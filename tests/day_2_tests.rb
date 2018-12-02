@@ -35,4 +35,10 @@ class Day2Test < Minitest::Test
       assert_equal example[:output], invert_letter_frequencies(example[:input])
     end
   end
+
+  def test_calculate_checksum
+    input = %w(abcdef bababc abbcde abcccd aabcdd abcdee ababab)
+
+    assert_equal 12, calculate_checksum(input)
+  end
 end
