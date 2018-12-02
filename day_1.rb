@@ -44,7 +44,7 @@ class Calibrator
   end
 end
 
-input = File.readlines('day_1_input.txt').map { |line| line.strip.to_i }
+input = File.readlines('inputs/day_1.txt').map { |line| line.strip.to_i }
 # puts Calibrator.new.total_frequency(input)
 # puts Calibrator.new.find_repeated_frequency(input)
 puts Calibrator.new.find_repeated_frequency_alt(input)
