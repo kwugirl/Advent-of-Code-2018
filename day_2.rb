@@ -32,5 +32,22 @@ def calculate_checksum(ids)
   duos.count * triplets.count
 end
 
+def find_correct_box_id(ids)
+  id_length = ids.first.length
+
+  (0...id_length).each do |position|
+    excised_ids = ids.map { |id| id[0...position] + id[position+1..-1] }.sort
+
+    excised_ids.detect do |id|
+      if excised_ids.rindex(id) != excised_ids.index(id)
+        return id
+      end
+    end
+  end
+
+  false
+end
+
 input = File.readlines('inputs/day_2.txt').map { |line| line.strip }
-puts calculate_checksum(input)
+# puts calculate_checksum(input)
+puts find_correct_box_id(input)

@@ -41,4 +41,10 @@ class Day2Test < Minitest::Test
 
     assert_equal 12, calculate_checksum(input)
   end
+
+  def test_find_correct_box_id
+    input = %w(abcde fghij klmno pqrst fguij axcye wvxyz)
+
+    assert_equal "fgij", find_correct_box_id(input)
+  end
 end
