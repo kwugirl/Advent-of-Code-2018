@@ -45,7 +45,7 @@ class Record
   end
 
   def self.parse_guard_id(record)
-    record.split(" ")[2]
+    record.split(" ")[2].delete("#")
   end
 end
 
@@ -68,6 +68,16 @@ class Guard
 
   def sleepier_than(other_guard)
     total_sleep > other_guard.total_sleep
+  end
+
+  def sleepiest_minute
+    midnight_hour = Hash.new(0)
+
+    sleep_logs.each do |log|
+      log.minutes_asleep.each { |min| midnight_hour[min] += 1 }
+    end
+
+    midnight_hour.max_by{ |k,v| v }[0]
   end
 end
 
@@ -116,4 +126,16 @@ class Analysis
 
     sleepiest_guard
   end
+
+  def sleepiest_guard_sleepiest_minute
+    guard = sleepiest_guard
+    sleepiest_minute = guard.sleepiest_minute
+
+    guard.id.to_i * sleepiest_minute
+  end
 end
+
+raw_records = File.readlines('inputs/day_4.txt').map { |line| line.strip }.sort
+records_with_guards = Record.fill_in_guard(raw_records)
+guards = Record.parse(records_with_guards)
+puts Analysis.new(guards).sleepiest_guard_sleepiest_minute

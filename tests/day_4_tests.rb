@@ -50,7 +50,7 @@ class Day4Test < Minitest::Test
     ]
     parsed_records = Record.parse(input)
 
-    assert_equal 45, parsed_records["#10"].total_sleep
+    assert_equal 45, parsed_records["10"].total_sleep
   end
 
   def test_find_sleepiest_guard
@@ -63,7 +63,7 @@ class Day4Test < Minitest::Test
     guards = Record.parse(input)
     analysis = Analysis.new(guards)
 
-    assert_equal "#1", analysis.sleepiest_guard.id
+    assert_equal "1", analysis.sleepiest_guard.id
   end
 
   def test_minutes_asleep
@@ -72,5 +72,16 @@ class Day4Test < Minitest::Test
     sleep = SleepLog.new(time1, time2)
 
     assert_equal [2, 3], sleep.minutes_asleep
+  end
+
+  def test_guard_sleepiest_minute
+    time1 = Time.new(2002, 10, 31, 0, 2)
+    time2 = Time.new(2002, 10, 31, 0, 3)
+    time3 = Time.new(2002, 10, 31, 0, 4)
+    first_sleep = SleepLog.new(time1, time3)
+    second_sleep = SleepLog.new(time2, time3)
+    guard = Guard.new("test", [first_sleep, second_sleep])
+
+    assert_equal 3, guard.sleepiest_minute
   end
 end
