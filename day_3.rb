@@ -61,3 +61,7 @@ class Grid
     contested_coordinates.count
   end
 end
+
+claims = File.readlines('inputs/day_3.txt').map { |line| Claim.new(line.strip) }
+grid = Grid.new(claims)
+puts grid.contested_coordinates_count
