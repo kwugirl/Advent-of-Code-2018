@@ -65,4 +65,13 @@ class Day3Test < Minitest::Test
 
     assert_equal 4, grid.contested_coordinates_count
   end
+
+  def test_uncontested_claim
+    claim1 = Claim.new("#1 @ 1,3: 4x4")
+    claim2 = Claim.new("#2 @ 3,1: 4x4")
+    uncontested_claim = Claim.new("#3 @ 5,5: 2x2")
+    grid = Grid.new([claim1, claim2, uncontested_claim])
+
+    assert_equal uncontested_claim, grid.uncontested_claim
+  end
 end

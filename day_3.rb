@@ -27,6 +27,10 @@ class Claim
       coordinates
     end
   end
+
+  def uncontested_coordinates(contested_coordinates)
+    occupied_coordinates.dup.delete_if { |k, v| contested_coordinates.include?(k) }
+  end
 end
 
 class Grid
@@ -60,8 +64,19 @@ class Grid
   def contested_coordinates_count
     contested_coordinates.count
   end
+
+  def uncontested_claim
+    claims.each do |claim|
+      if claim.uncontested_coordinates(contested_coordinates) == claim.occupied_coordinates
+        return claim
+      end
+    end
+
+    nil
+  end
 end
 
 claims = File.readlines('inputs/day_3.txt').map { |line| Claim.new(line.strip) }
 grid = Grid.new(claims)
-puts grid.contested_coordinates_count
+# puts grid.contested_coordinates_count
+puts grid.uncontested_claim.id
