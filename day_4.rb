@@ -65,6 +65,10 @@ class Guard
   def total_sleep
     sleep_logs.inject(0) { |sum, log| sum += log.length_in_minutes }
   end
+
+  def sleepier_than(other_guard)
+    total_sleep > other_guard.total_sleep
+  end
 end
 
 class SleepLog
@@ -81,5 +85,23 @@ class SleepLog
 
   def length_in_minutes
     length_in_seconds/60
+  end
+end
+
+class Analysis
+  attr_reader :guards
+
+  def initialize(guards)
+    @guards = guards
+  end
+
+  def sleepiest_guard
+    sleepiest_guard = guards[guards.keys.sample]
+
+    guards.each do |guard_id, guard|
+      sleepiest_guard = guard if guard.sleepier_than(sleepiest_guard)
+    end
+
+    sleepiest_guard
   end
 end

@@ -52,4 +52,17 @@ class Day4Test < Minitest::Test
 
     assert_equal 45, parsed_records["#10"].total_sleep
   end
+
+  def test_find_sleepiest_guard
+    input = [
+      "[1518-11-01 00:05] #10 falls asleep",
+      "[1518-11-01 00:25] #10 wakes up",
+      "[1518-11-01 00:30] #1 falls asleep",
+      "[1518-11-01 00:55] #1 wakes up"
+    ]
+    guards = Record.parse(input)
+    analysis = Analysis.new(guards)
+
+    assert_equal "#1", analysis.sleepiest_guard.id
+  end
 end
