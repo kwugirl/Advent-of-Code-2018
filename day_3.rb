@@ -30,13 +30,24 @@ class Claim
 end
 
 class Grid
+  attr_reader :occupied_coordinates
   attr_accessor :claims
 
   def initialize(claims = [])
     @claims = claims
   end
 
-  def add_claim(claim)
-    @claims << claim
+  def add_claims(claims)
+    @claims += Array(claims)
+  end
+
+  def occupied_coordinates
+    @occupied_coordinates ||= begin
+      coordinates = Hash.new(0)
+      @claims.each do |claim|
+        coordinates.merge!(claim.occupied_coordinates) { |key, v1, v2| v1 + v2 }
+      end
+      coordinates
+    end
   end
 end

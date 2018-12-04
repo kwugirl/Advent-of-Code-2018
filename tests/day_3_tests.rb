@@ -14,7 +14,7 @@ class Day3Test < Minitest::Test
     assert_equal 4, claim.height
   end
 
-  def test_occupied_coordinates
+  def test_occupied_coordinates_for_claim
     expected = {
       "(4,3)"=>1, "(4,4)"=>1, "(4,5)"=>1, "(4,6)"=>1,
       "(5,3)"=>1, "(5,4)"=>1, "(5,5)"=>1, "(5,6)"=>1,
@@ -29,16 +29,32 @@ class Day3Test < Minitest::Test
   end
 
   def test_add_claim_to_grid
-    claim1 = Claim.new("#123 @ 3,2: 5x4")
+    claim1 = Claim.new("#1 @ 1,3: 4x4")
     claim2 = Claim.new("#2 @ 3,1: 4x4")
     claim3 = Claim.new("#3 @ 5,5: 2x2")
 
     grid = Grid.new
-
-    grid.add_claim(claim1)
-    grid.add_claim(claim2)
-    grid.add_claim(claim3)
+    grid.add_claims([claim1, claim2, claim3])
 
     assert_equal [claim1, claim2, claim3], grid.claims
+  end
+
+  def test_occupied_coordinates_on_grid
+    claim1 = Claim.new("#1 @ 1,3: 4x4")
+    claim2 = Claim.new("#2 @ 3,1: 4x4")
+    claim3 = Claim.new("#3 @ 5,5: 2x2")
+    grid = Grid.new
+    grid.add_claims([claim1, claim2, claim3])
+
+    expected = {
+      "(2,4)"=>1, "(2,5)"=>1, "(2,6)"=>1, "(2,7)"=>1,
+      "(3,4)"=>1, "(3,5)"=>1, "(3,6)"=>1, "(3,7)"=>1,
+      "(4,2)"=>1, "(4,3)"=>1, "(4,4)"=>2, "(4,5)"=>2, "(4,6)"=>1, "(4,7)"=>1,
+      "(5,2)"=>1, "(5,3)"=>1, "(5,4)"=>2, "(5,5)"=>2, "(5,6)"=>1, "(5,7)"=>1,
+      "(6,2)"=>1, "(6,3)"=>1, "(6,4)"=>1, "(6,5)"=>1, "(6,6)"=>1, "(6,7)"=>1,
+      "(7,2)"=>1, "(7,3)"=>1, "(7,4)"=>1, "(7,5)"=>1, "(7,6)"=>1, "(7,7)"=>1
+    }
+
+    assert_equal expected, grid.occupied_coordinates
   end
 end
