@@ -30,7 +30,7 @@ class Claim
 end
 
 class Grid
-  attr_reader :occupied_coordinates
+  attr_reader :occupied_coordinates, :contested_coordinates
   attr_accessor :claims
 
   def initialize(claims = [])
@@ -49,5 +49,15 @@ class Grid
       end
       coordinates
     end
+  end
+
+  def contested_coordinates
+    @contested_coordinates ||= begin
+      occupied_coordinates.dup.keep_if {|k, v| v > 1}
+    end
+  end
+
+  def contested_coordinates_count
+    contested_coordinates.count
   end
 end
