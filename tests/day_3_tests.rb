@@ -28,7 +28,7 @@ class Day3Test < Minitest::Test
     assert_equal expected, claim.occupied_coordinates
   end
 
-  def test_add_claim_to_grid
+  def test_add_claims_to_grid
     claim1 = Claim.new("#1 @ 1,3: 4x4")
     claim2 = Claim.new("#2 @ 3,1: 4x4")
     claim3 = Claim.new("#3 @ 5,5: 2x2")
@@ -43,8 +43,7 @@ class Day3Test < Minitest::Test
     claim1 = Claim.new("#1 @ 1,3: 4x4")
     claim2 = Claim.new("#2 @ 3,1: 4x4")
     claim3 = Claim.new("#3 @ 5,5: 2x2")
-    grid = Grid.new
-    grid.add_claims([claim1, claim2, claim3])
+    grid = Grid.new([claim1, claim2, claim3])
 
     expected = {
       "(2,4)"=>1, "(2,5)"=>1, "(2,6)"=>1, "(2,7)"=>1,
@@ -62,8 +61,7 @@ class Day3Test < Minitest::Test
     claim1 = Claim.new("#1 @ 1,3: 4x4")
     claim2 = Claim.new("#2 @ 3,1: 4x4")
     claim3 = Claim.new("#3 @ 5,5: 2x2")
-    grid = Grid.new
-    grid.add_claims([claim1, claim2, claim3])
+    grid = Grid.new([claim1, claim2, claim3])
 
     assert_equal 4, grid.contested_coordinates_count
   end
