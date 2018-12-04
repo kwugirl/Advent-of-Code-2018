@@ -41,4 +41,15 @@ class Day4Test < Minitest::Test
     assert_equal expected, Record.fill_in_guard(EXAMPLE_RECORDS)
   end
 
+  def test_guard_sleep_total
+    input = [
+      "[1518-11-01 00:05] #10 falls asleep",
+      "[1518-11-01 00:25] #10 wakes up",
+      "[1518-11-01 00:30] #10 falls asleep",
+      "[1518-11-01 00:55] #10 wakes up"
+    ]
+    parsed_records = Record.parse(input)
+
+    assert_equal 45, parsed_records["#10"].total_sleep
+  end
 end
