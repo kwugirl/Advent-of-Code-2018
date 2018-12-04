@@ -86,6 +86,18 @@ class SleepLog
   def length_in_minutes
     length_in_seconds/60
   end
+
+  def minutes_asleep
+    starting_min = start_time.min
+    ending_min = end_time.min
+    minutes_asleep = []
+
+    (starting_min...ending_min).each do |min|
+      minutes_asleep << min
+    end
+
+    minutes_asleep
+  end
 end
 
 class Analysis

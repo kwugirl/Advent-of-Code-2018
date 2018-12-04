@@ -65,4 +65,12 @@ class Day4Test < Minitest::Test
 
     assert_equal "#1", analysis.sleepiest_guard.id
   end
+
+  def test_minutes_asleep
+    time1 = Time.new(2002, 10, 31, 0, 2)
+    time2 = Time.new(2002, 10, 31, 0, 4)
+    sleep = SleepLog.new(time1, time2)
+
+    assert_equal [2, 3], sleep.minutes_asleep
+  end
 end
