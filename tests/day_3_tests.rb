@@ -27,4 +27,18 @@ class Day3Test < Minitest::Test
 
     assert_equal expected, claim.occupied_coordinates
   end
+
+  def test_add_claim_to_grid
+    claim1 = Claim.new("#123 @ 3,2: 5x4")
+    claim2 = Claim.new("#2 @ 3,1: 4x4")
+    claim3 = Claim.new("#3 @ 5,5: 2x2")
+
+    grid = Grid.new
+
+    grid.add_claim(claim1)
+    grid.add_claim(claim2)
+    grid.add_claim(claim3)
+
+    assert_equal [claim1, claim2, claim3], grid.claims
+  end
 end

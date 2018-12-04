@@ -28,3 +28,15 @@ class Claim
     end
   end
 end
+
+class Grid
+  attr_accessor :claims
+
+  def initialize(claims = [])
+    @claims = claims
+  end
+
+  def add_claim(claim)
+    @claims << claim
+  end
+end
