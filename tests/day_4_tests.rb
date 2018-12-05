@@ -84,4 +84,12 @@ class Day4Test < Minitest::Test
 
     assert_equal 3, guard.sleepiest_minute
   end
+
+  def test_find_most_frequently_asleep_guard
+    records_with_guards = Record.fill_in_guard(EXAMPLE_RECORDS)
+    guards = Record.parse(records_with_guards)
+    analysis = Analysis.new(guards)
+
+    assert_equal "99", analysis.most_frequently_asleep_guard.id
+  end
 end

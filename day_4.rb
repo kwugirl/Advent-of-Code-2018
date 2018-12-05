@@ -71,13 +71,21 @@ class Guard
   end
 
   def sleepiest_minute
+    sleeping_minute_frequencies.max_by{ |k,v| v }[0]
+  end
+
+  def sleepiest_minute_count
+    sleeping_minute_frequencies.max_by{ |k,v| v }[1]
+  end
+
+  def sleeping_minute_frequencies
     midnight_hour = Hash.new(0)
 
     sleep_logs.each do |log|
       log.minutes_asleep.each { |min| midnight_hour[min] += 1 }
     end
 
-    midnight_hour.max_by{ |k,v| v }[0]
+    midnight_hour
   end
 end
 
@@ -133,9 +141,29 @@ class Analysis
 
     guard.id.to_i * sleepiest_minute
   end
+
+  def most_frequently_asleep_guard
+    most_frequently_asleep_guard = guards[guards.keys.sample]
+
+    guards.each do |guard_id, guard|
+      if guard.sleepiest_minute_count > most_frequently_asleep_guard.sleepiest_minute_count
+        most_frequently_asleep_guard = guard
+      end
+    end
+
+    most_frequently_asleep_guard
+  end
+
+  def most_frequently_asleep_minute
+    guard = most_frequently_asleep_guard
+    sleepiest_minute = guard.sleepiest_minute
+
+    guard.id.to_i * sleepiest_minute
+  end
 end
 
 raw_records = File.readlines('inputs/day_4.txt').map { |line| line.strip }.sort
 records_with_guards = Record.fill_in_guard(raw_records)
 guards = Record.parse(records_with_guards)
-puts Analysis.new(guards).sleepiest_guard_sleepiest_minute
+# puts Analysis.new(guards).sleepiest_guard_sleepiest_minute
+puts Analysis.new(guards).most_frequently_asleep_minute
