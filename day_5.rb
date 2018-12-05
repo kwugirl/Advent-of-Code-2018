@@ -1,8 +1,17 @@
+POLAR_PAIRS = begin
+  pairs = Hash.new(false)
+  ('a'..'z').each do |letter|
+    pairs["#{letter}#{letter.upcase}"] = true
+    pairs["#{letter.upcase}#{letter}"] = true
+  end
+  pairs
+end
+
 def remove_polar_pairs(input)
   output = input.split("")
 
   output.each_index do |i|
-    if polar_pair?(output[i..i+1])
+    if polar_pair?(output[i..i+1].join(""))
       output.slice!(i, 2)
     end
   end
@@ -11,12 +20,7 @@ def remove_polar_pairs(input)
 end
 
 def polar_pair?(pair)
-  return false unless pair[1]
-
-  first_letter = pair[0]
-  second_letter = pair[1]
-
-  first_letter == second_letter.swapcase
+  POLAR_PAIRS[pair]
 end
 
 def resolve_polarity(polymer)
