@@ -9,7 +9,7 @@ POLAR_PAIRS = begin
   pairs
 end
 
-def remove_polar_pairs(input)
+def remove_polar_pairs_original(input)
   output = input.split("")
 
   output.each_index do |i|
@@ -19,6 +19,15 @@ def remove_polar_pairs(input)
   end
 
   output.join("")
+end
+
+def remove_polar_pairs(input)
+  output = input.dup
+
+  POLAR_PAIRS.each do |pair, v|
+    output.gsub!(pair, '')
+  end
+  output
 end
 
 def polar_pair?(pair)
@@ -64,3 +73,16 @@ puts resolve_polarity_iterative(input).length
 #                          user     system      total        real
 # recursive approach  16.282709   0.150932  16.433641 ( 16.459125)
 # iterative approach  16.017317   0.110487  16.127804 ( 16.141921)
+
+# Benchmark.bm(30) do |x|
+#   x.report("remove_polar_pairs_original") do
+#     remove_polar_pairs_original(input)
+#   end
+#   x.report("remove_polar_pairs") do
+#     remove_polar_pairs(input)
+#   end
+# end
+# RESULTS
+#                                      user     system      total        real
+# remove_polar_pairs_original      0.109257   0.002013   0.111270 (  0.111369)
+# remove_polar_pairs               0.003737   0.000547   0.004284 (  0.004284)
