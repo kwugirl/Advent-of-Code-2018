@@ -59,4 +59,10 @@ class Day5Test < Minitest::Test
       assert_equal example[:expected], resolve_polarity_iterative(example[:input])
     end
   end
+
+  def test_find_optimized_polymer_length
+    input = "dabAcCaCBAcCcaDA"
+
+    assert_equal 4, find_optimized_polymer_length(input)
+  end
 end

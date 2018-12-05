@@ -58,8 +58,28 @@ def resolve_polarity_iterative(polymer)
   reduced_polymers[:current]
 end
 
+def find_optimized_polymer_length(polymer)
+  results = {}
+
+  ('a'..'z').each do |letter|
+    unit = "#{letter}#{letter.upcase}"
+    results[unit] = remove_unit_and_resolve_polarity(polymer, unit)
+
+    unit = "#{letter.upcase}#{letter}"
+    results[unit] = remove_unit_and_resolve_polarity(polymer, unit)
+  end
+
+  results.min_by { |k,v| v }[1]
+end
+
+def remove_unit_and_resolve_polarity(polymer, unit)
+  test_polymer = polymer.delete(unit)
+  resolve_polarity_iterative(test_polymer).length
+end
+
 input = File.read('inputs/day_5.txt').strip
-puts resolve_polarity_iterative(input).length
+# puts resolve_polarity_iterative(input).length
+puts find_optimized_polymer_length(input)
 
 # Benchmark.bm(18) do |x|
 #   x.report("recursive approach") do
