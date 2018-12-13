@@ -7,9 +7,9 @@ class Map
 
     input.each_with_index do |row, y|
       row.each_char.with_index do |char, x|
-        location = "#{x}, #{y}"
+        location = "#{x},#{y}"
 
-        @grid["#{x}, #{y}"] = case char
+        @grid["#{x},#{y}"] = case char
         when "^"
           {
             track: "|",
@@ -40,15 +40,15 @@ class Map
   end
 
   def at(x, y)
-    @grid["#{x}, #{y}"]
+    @grid["#{x},#{y}"]
   end
 
   def track_at(x, y)
-    @grid["#{x}, #{y}"][:track]
+    @grid["#{x},#{y}"][:track]
   end
 
   def cart_at(x, y)
-    @grid["#{x}, #{y}"][:cart]
+    @grid["#{x},#{y}"][:cart]
   end
 
   private
@@ -61,10 +61,28 @@ class Map
 end
 
 class Cart
-  attr_accessor :location, :direction
+  attr_reader :location
+  attr_accessor :direction
 
   def initialize(location, direction)
     @location = location
     @direction = direction
+  end
+
+  def update_location
+    x, y = location.split(",").map(&:to_i)
+
+    case direction
+    when :up
+      y -= 1
+    when :down
+      y += 1
+    when :left
+      x -= 1
+    when :right
+      x += 1
+    end
+
+    @location = "#{x},#{y}"
   end
 end
