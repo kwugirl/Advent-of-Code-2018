@@ -6,7 +6,7 @@ class Day13Test < Minitest::Test
     input = [
       "/----\\",
       "^    |",
-      "|    |",
+      "|    v",
       "\\----/"
     ]
     @map = Map.new(input)
@@ -27,5 +27,9 @@ class Day13Test < Minitest::Test
 
     assert_equal :up, cart.direction
     assert_equal "0, 1", cart.location
+  end
+
+  def test_map_tracks_carts
+    assert_equal 2, @map.carts.length
   end
 end
