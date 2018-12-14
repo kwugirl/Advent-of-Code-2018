@@ -76,4 +76,20 @@ class CartTest < Minitest::Test
       cart.update_direction("|")
     end
   end
+
+  def test_update_direction_intersections
+    cart = Cart.new("1,1", :left)
+
+    cart.update_direction("+")
+    assert_equal :down, cart.direction
+
+    cart.update_direction("+")
+    assert_equal :down, cart.direction
+
+    cart.update_direction("+")
+    assert_equal :left, cart.direction
+
+    cart.update_direction("+")
+    assert_equal :down, cart.direction
+  end
 end

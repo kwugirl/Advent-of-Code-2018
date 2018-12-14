@@ -64,9 +64,12 @@ class Cart
   attr_reader :location
   attr_accessor :direction
 
+  INTERSECTION_OPTIONS = [:left, :straight, :right]
+
   def initialize(location, direction)
     @location = location
     @direction = direction
+    @intersection_count = 0
   end
 
   def update_location
@@ -103,6 +106,29 @@ class Cart
       @direction = :right if @direction == :down
       @direction = :up if @direction == :left
       @direction = :left if @direction == :up
+    when "+"
+      turn = INTERSECTION_OPTIONS[@intersection_count%3]
+      @intersection_count += 1
+      @direction = resolve_intersection(turn)
+    end
+  end
+
+  private
+
+  def resolve_intersection(turn)
+    case turn
+    when :left
+      return :up if @direction == :right
+      return :right if @direction == :down
+      return :down if @direction == :left
+      return :left if @direction == :up
+    when :straight
+      return @direction
+    when :right
+      return :down if @direction == :right
+      return :left if @direction == :down
+      return :up if @direction == :left
+      return :right if @direction == :up
     end
   end
 end
