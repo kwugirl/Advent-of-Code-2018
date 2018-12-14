@@ -4,8 +4,12 @@ class Map
   def initialize(input)
     @grid = {}
     @carts = []
+    @height = input.length
+    @width = 0
 
     input.each_with_index do |row, y|
+      @width = row.length if row.length > @width
+
       row.each_char.with_index do |char, x|
         location = "#{x},#{y}"
 
@@ -53,6 +57,7 @@ class Map
 
   private
 
+  # TODO: might not actually need to keep track of carts??
   def new_cart(location, direction)
     cart = Cart.new(location, direction)
     @carts << cart
