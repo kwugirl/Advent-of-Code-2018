@@ -65,10 +65,10 @@ class CartTest < Minitest::Test
 
     assert_equal :down, cart.direction
 
-    cart = Cart.new("1,1", :up)
+    cart = Cart.new("1,1", :right)
     cart.update_direction("\\")
 
-    assert_equal :left, cart.direction
+    assert_equal :down, cart.direction
   end
 
   def test_update_direction_bad_input

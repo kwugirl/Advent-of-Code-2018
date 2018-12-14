@@ -142,21 +142,33 @@ class Cart
       raise "This doesn't seem valid: #{self}, #{track}"
     end
 
-    case track
+    @direction = case track
     when "/"
-      @direction = :up if @direction == :right
-      @direction = :left if @direction == :down
-      @direction = :down if @direction == :left
-      @direction = :right if @direction == :up
+      if @direction == :right
+        :up
+      elsif @direction == :down
+        :left
+      elsif @direction == :left
+        :down
+      elsif @direction == :up
+        :right
+      end
     when "\\"
-      @direction = :down if @direction == :right
-      @direction = :right if @direction == :down
-      @direction = :up if @direction == :left
-      @direction = :left if @direction == :up
+      if @direction == :right
+        :down
+      elsif @direction == :down
+        :right
+      elsif @direction == :left
+        :up
+      elsif @direction == :up
+        :left
+      end
     when "+"
       turn = INTERSECTION_OPTIONS[@intersection_count%3]
       @intersection_count += 1
-      @direction = resolve_intersection(turn)
+      resolve_intersection(turn)
+    else
+      @direction
     end
   end
 
