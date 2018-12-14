@@ -43,16 +43,16 @@ class Map
     end
   end
 
-  def at(x, y)
-    @grid["#{x},#{y}"]
+  def at(location)
+    @grid[location]
   end
 
-  def track_at(x, y)
-    @grid["#{x},#{y}"][:track]
+  def track_at(location)
+    @grid[location][:track]
   end
 
-  def cart_at(x, y)
-    @grid["#{x},#{y}"][:cart]
+  def cart_at(location)
+    @grid[location][:cart]
   end
 
   private
