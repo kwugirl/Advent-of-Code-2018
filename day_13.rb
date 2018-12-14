@@ -1,9 +1,7 @@
 class Map
-  attr_reader :carts
-
   def initialize(input)
-    @grid = {}
-    @carts = []
+    @track_grid = {}
+    @cart_grid = {}
     @height = input.length
     @width = 0
 
@@ -13,41 +11,25 @@ class Map
       row.each_char.with_index do |char, x|
         location = "#{x},#{y}"
 
-        @grid["#{x},#{y}"] = case char
+        case char
         when "^", "v", "<", ">"
           conversion = Cart::CHAR_UNMAPPING[char]
-          {
-            track: conversion[:track],
-            cart: new_cart(location, conversion[:direction])
-          }
+
+          @track_grid[location] = conversion[:track]
+          @cart_grid[location] = Cart.new(location, conversion[:direction])
         else
-          {
-            track: char
-          }
+          @track_grid[location] = char
         end
       end
     end
   end
 
-  def at(location)
-    @grid[location]
-  end
-
   def track_at(location)
-    @grid[location][:track]
+    @track_grid[location]
   end
 
   def cart_at(location)
-    @grid[location][:cart]
-  end
-
-  private
-
-  # TODO: might not actually need to keep track of carts??
-  def new_cart(location, direction)
-    cart = Cart.new(location, direction)
-    @carts << cart
-    cart
+    @cart_grid[location]
   end
 end
 

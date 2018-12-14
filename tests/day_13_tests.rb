@@ -29,9 +29,6 @@ class MapTest < Minitest::Test
     assert_equal "0,1", cart.location
   end
 
-  def test_map_tracks_carts
-    assert_equal 2, @map.carts.length
-  end
 end
 
 class CartTest < Minitest::Test
