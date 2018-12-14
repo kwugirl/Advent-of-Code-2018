@@ -44,4 +44,36 @@ class CartTest < Minitest::Test
     cart.update_location
     assert_equal "1,0", cart.location
   end
+
+  def test_update_direction_straight
+    cart = Cart.new("1,1", :left)
+    cart.update_direction("-")
+
+    assert_equal :left, cart.direction
+
+    cart = Cart.new("1,1", :up)
+    cart.update_direction("|")
+
+    assert_equal :up, cart.direction
+  end
+
+  def test_update_direction_curve
+    cart = Cart.new("1,1", :left)
+    cart.update_direction("/")
+
+    assert_equal :down, cart.direction
+
+    cart = Cart.new("1,1", :up)
+    cart.update_direction("\\")
+
+    assert_equal :left, cart.direction
+  end
+
+  def test_update_direction_bad_input
+    cart = Cart.new("1,1", :left)
+
+    assert_raises StandardError do
+      cart.update_direction("|")
+    end
+  end
 end

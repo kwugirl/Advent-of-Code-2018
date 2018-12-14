@@ -85,4 +85,24 @@ class Cart
 
     @location = "#{x},#{y}"
   end
+
+  def update_direction(track)
+    if track == "-" && (@direction == :up || @direction == :down) ||
+      track == "|" && (@direction == :left || @direction == :right)
+      raise "This doesn't seem valid: #{self}, #{track}"
+    end
+
+    case track
+    when "/"
+      @direction = :up if @direction == :right
+      @direction = :left if @direction == :down
+      @direction = :down if @direction == :left
+      @direction = :right if @direction == :up
+    when "\\"
+      @direction = :down if @direction == :right
+      @direction = :right if @direction == :down
+      @direction = :up if @direction == :left
+      @direction = :left if @direction == :up
+    end
+  end
 end
