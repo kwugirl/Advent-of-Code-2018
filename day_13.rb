@@ -32,7 +32,7 @@ class Map
     map[location]
   end
 
-  def play
+  def find_first_crash
     # print_map
     while true
       @new_cart_grid = @cart_grid.dup
@@ -194,4 +194,4 @@ end
 
 input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
 map = Map.new(input)
-puts "First crash happened at #{map.play}"
+puts "First crash happened at #{map.find_first_crash}"

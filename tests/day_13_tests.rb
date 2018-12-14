@@ -29,10 +29,10 @@ class MapTest < Minitest::Test
     assert_equal "0,1", cart.location
   end
 
-  def test_play
+  def test_find_first_crash
     straight_track = %w(| v | | | ^ |)
     map = Map.new(straight_track)
-    assert_equal "0,3", map.play
+    assert_equal "0,3", map.find_first_crash
 
     second_example = [
       "/->-\\        ",
@@ -43,7 +43,7 @@ class MapTest < Minitest::Test
       "  \\------/   "
     ]
     second_map = Map.new(second_example)
-    assert_equal "7,3", second_map.play
+    assert_equal "7,3", second_map.find_first_crash
   end
 end
 
