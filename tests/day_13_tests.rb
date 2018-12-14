@@ -45,6 +45,15 @@ class MapTest < Minitest::Test
     second_map = Map.new(second_example)
     assert_equal "7,3", second_map.find_first_crash
   end
+
+  def test_find_first_crash_idempotent
+    straight_track = %w(| v | | | ^ |)
+    map = Map.new(straight_track)
+    map.find_first_crash
+
+    assert_equal :down, map.cart_at("0,1").direction
+    assert_equal :up, map.cart_at("0,5").direction
+  end
 end
 
 class CartTest < Minitest::Test

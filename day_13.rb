@@ -28,11 +28,13 @@ class Map
     @track_grid[location]
   end
 
-  def cart_at(location, map = @cart_grid)
-    map[location]
+  def cart_at(location, carts = @cart_grid)
+    carts[location]
   end
 
   def find_first_crash
+    original_cart_grid = @cart_grid.dup
+
     # print_map
     while true
       @new_cart_grid = @cart_grid.dup
@@ -47,6 +49,8 @@ class Map
             cart.update_location
 
             if cart_at(cart.location, @new_cart_grid)
+              # reset so that this method is idempotent
+              @cart_grid = original_cart_grid
               # puts "Crash! at #{cart.location}"
               return cart.location
             else
