@@ -14,25 +14,11 @@ class Map
         location = "#{x},#{y}"
 
         @grid["#{x},#{y}"] = case char
-        when "^"
+        when "^", "v", "<", ">"
+          conversion = Cart::CHAR_UNMAPPING[char]
           {
-            track: "|",
-            cart: new_cart(location, :up)
-          }
-        when "v"
-          {
-            track: "|",
-            cart: new_cart(location, :down)
-          }
-        when "<"
-          {
-            track: "-",
-            cart: new_cart(location, :left)
-          }
-        when ">"
-          {
-            track: "-",
-            cart: new_cart(location, :right)
+            track: conversion[:track],
+            cart: new_cart(location, conversion[:direction])
           }
         else
           {
@@ -69,6 +55,12 @@ class Cart
   attr_reader :location
   attr_accessor :direction
 
+  CHAR_UNMAPPING = {
+    "^" => { track: "|", direction: :up},
+    "v" => { track: "|", direction: :down},
+    ">" => { track: "-", direction: :right},
+    "<" => { track: "-", direction: :left}
+  }
   INTERSECTION_OPTIONS = [:left, :straight, :right]
 
   def initialize(location, direction)
