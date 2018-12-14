@@ -191,3 +191,7 @@ class Cart
     end
   end
 end
+
+input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
+map = Map.new(input)
+puts "First crash happened at #{map.play}"
