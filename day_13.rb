@@ -31,17 +31,43 @@ class Map
   def cart_at(location)
     @cart_grid[location]
   end
+
+  private
+
+  def print_map
+    puts "=====top of map====="
+    (0...@height).each do |y|
+      row = []
+      (0...@width).each do |x|
+        location = "#{x},#{y}"
+        cart = cart_at(location)
+
+        if cart
+          row << cart.to_s
+        else
+          row << track_at(location)
+        end
+      end
+      puts row.join("")
+    end
+    puts "=====bottom of map====="
+  end
 end
 
 class Cart
-  attr_reader :location
-  attr_accessor :direction
+  attr_reader :location, :direction
 
   CHAR_UNMAPPING = {
     "^" => { track: "|", direction: :up},
     "v" => { track: "|", direction: :down},
     ">" => { track: "-", direction: :right},
     "<" => { track: "-", direction: :left}
+  }
+  CHAR_MAPPING = {
+    up: "^",
+    down: "v",
+    right: ">",
+    left: "<"
   }
   INTERSECTION_OPTIONS = [:left, :straight, :right]
 
@@ -51,10 +77,14 @@ class Cart
     @intersection_count = 0
   end
 
+  def to_s
+    CHAR_MAPPING[@direction]
+  end
+
   def update_location
     x, y = location.split(",").map(&:to_i)
 
-    case direction
+    case @direction
     when :up
       y -= 1
     when :down
