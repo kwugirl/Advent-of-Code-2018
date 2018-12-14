@@ -29,6 +29,11 @@ class MapTest < Minitest::Test
     assert_equal "0,1", cart.location
   end
 
+  def test_play
+    straight_track = %w(| v | | | ^ |)
+    map = Map.new(straight_track)
+    assert_equal "0,3", map.play
+  end
 end
 
 class CartTest < Minitest::Test

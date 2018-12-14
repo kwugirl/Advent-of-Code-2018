@@ -28,19 +28,57 @@ class Map
     @track_grid[location]
   end
 
-  def cart_at(location)
-    @cart_grid[location]
+  def cart_at(location, map = @cart_grid)
+    map[location]
+  end
+
+  def play
+    # print_map
+    while true
+      @new_cart_grid = @cart_grid.dup
+
+      (0...@height).each do |y|
+        (0...@width).each do |x|
+          location = "#{x},#{y}"
+          cart = cart_at(location)
+
+          if cart
+            remove_cart(location)
+            cart.update_location
+
+            if cart_at(cart.location, @new_cart_grid)
+              puts "Crash! at #{cart.location}"
+              return cart.location
+            else
+              cart.update_direction(track_at(cart.location))
+              add_cart(cart)
+              # print_map(@new_cart_grid)
+            end
+          end
+        end
+      end
+
+      @cart_grid = @new_cart_grid
+    end
   end
 
   private
 
-  def print_map
+  def remove_cart(location)
+    @new_cart_grid.delete(location)
+  end
+
+  def add_cart(cart)
+    @new_cart_grid[cart.location] = cart
+  end
+
+  def print_map(map = @cart_grid)
     puts "=====top of map====="
     (0...@height).each do |y|
       row = []
       (0...@width).each do |x|
         location = "#{x},#{y}"
-        cart = cart_at(location)
+        cart = cart_at(location, map)
 
         if cart
           row << cart.to_s
