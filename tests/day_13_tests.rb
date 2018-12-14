@@ -33,6 +33,17 @@ class MapTest < Minitest::Test
     straight_track = %w(| v | | | ^ |)
     map = Map.new(straight_track)
     assert_equal "0,3", map.play
+
+    second_example = [
+      "/->-\\        ",
+      "|   |  /----\\",
+      "| /-+--+-\\  |",
+      "| | |  | v  |",
+      "\\-+-/  \\-+--/",
+      "  \\------/   "
+    ]
+    second_map = Map.new(second_example)
+    assert_equal "7,3", second_map.play
   end
 end
 

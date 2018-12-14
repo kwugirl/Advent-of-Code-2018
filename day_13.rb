@@ -47,7 +47,7 @@ class Map
             cart.update_location
 
             if cart_at(cart.location, @new_cart_grid)
-              puts "Crash! at #{cart.location}"
+              # puts "Crash! at #{cart.location}"
               return cart.location
             else
               cart.update_direction(track_at(cart.location))
