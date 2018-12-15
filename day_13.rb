@@ -1,7 +1,9 @@
+require 'pry'
+
 class Map
   def initialize(input)
     @track_grid = {}
-    @cart_grid = {}
+    @cart_grid = CartGrid.new
     @height = input.length
     @width = 0
 
@@ -16,7 +18,7 @@ class Map
           conversion = Cart::CHAR_UNMAPPING[char]
 
           @track_grid[location] = conversion[:track]
-          @cart_grid[location] = Cart.new(location, conversion[:direction])
+          @cart_grid.add_cart(Cart.new(location, conversion[:direction]))
         else
           @track_grid[location] = char
         end
@@ -28,61 +30,54 @@ class Map
     @track_grid[location]
   end
 
-  def cart_at(location, carts = @cart_grid)
-    carts[location]
+  def cart_at(location)
+    @cart_grid.at(location)
   end
 
   def find_first_crash
-    original_cart_grid = @cart_grid.dup
+    original_cart_grid = CartGrid.new(@cart_grid.carts)
 
     # print_map
     while true
-      @new_cart_grid = @cart_grid.dup
+      new_cart_grid = CartGrid.new(@cart_grid.carts)
 
       (0...@height).each do |y|
         (0...@width).each do |x|
           location = "#{x},#{y}"
-          cart = cart_at(location)
+          cart = @cart_grid.at(location)
 
           if cart
-            remove_cart(location)
+            @cart_grid.remove_cart_at(location)
+            new_cart_grid.remove_cart_at(location)
             cart.update_location
 
-            if cart_at(cart.location, @new_cart_grid)
+            if new_cart_grid.at(cart.location)
               # reset so that this method is idempotent
               @cart_grid = original_cart_grid
               # puts "Crash! at #{cart.location}"
               return cart.location
             else
               cart.update_direction(track_at(cart.location))
-              add_cart(cart)
-              # print_map(@new_cart_grid)
+              new_cart_grid.add_cart(cart)
+              # print_map(new_cart_grid)
             end
           end
         end
       end
 
-      @cart_grid = @new_cart_grid
+      @cart_grid = new_cart_grid
     end
   end
 
   private
 
-  def remove_cart(location)
-    @new_cart_grid.delete(location)
-  end
-
-  def add_cart(cart)
-    @new_cart_grid[cart.location] = cart
-  end
-
-  def print_map(map = @cart_grid)
+  def print_map(carts = @cart_grid)
     puts "=====top of map====="
     (0...@height).each do |y|
       row = []
       (0...@width).each do |x|
         location = "#{x},#{y}"
-        cart = cart_at(location, map)
+        cart = carts.at(location)
 
         if cart
           row << cart.to_s
@@ -93,6 +88,26 @@ class Map
       puts row.join("")
     end
     puts "=====bottom of map====="
+  end
+end
+
+class CartGrid
+  attr_reader :carts
+
+  def initialize(carts = {})
+    @carts = carts.dup
+  end
+
+  def at(location)
+    @carts[location]
+  end
+
+  def remove_cart_at(location)
+    @carts.delete(location)
+  end
+
+  def add_cart(cart)
+    @carts[cart.location] = cart
   end
 end
 
