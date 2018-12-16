@@ -3,6 +3,7 @@ require 'pry'
 class Map
   def initialize(input)
     @track_grid = {}
+    @crashed_cart_locations = []
     @cart_grid = CartGrid.new
     @height = input.length
     @width = 0
@@ -34,39 +35,48 @@ class Map
     @cart_grid.at(location)
   end
 
-  def find_first_crash
-    original_cart_grid = CartGrid.new(@cart_grid.carts)
+  def play_tick
+    new_cart_grid = CartGrid.new
 
-    # print_map
-    while true
-      new_cart_grid = CartGrid.new(@cart_grid.carts)
+    (0...@height).each do |y|
+      (0...@width).each do |x|
+        location = "#{x},#{y}"
+        cart = @cart_grid.at(location)
 
-      (0...@height).each do |y|
-        (0...@width).each do |x|
-          location = "#{x},#{y}"
-          cart = @cart_grid.at(location)
+        if cart
+          @cart_grid.remove_cart_at(location)
+          new_location = cart.update_location
 
-          if cart
-            @cart_grid.remove_cart_at(location)
-            new_cart_grid.remove_cart_at(location)
-            cart.update_location
-
-            if new_cart_grid.at(cart.location)
-              # reset so that this method is idempotent
-              @cart_grid = original_cart_grid
-              # puts "Crash! at #{cart.location}"
-              return cart.location
-            else
-              cart.update_direction(track_at(cart.location))
-              new_cart_grid.add_cart(cart)
-              # print_map(new_cart_grid)
-            end
+          if new_cart_grid.at(new_location)
+            puts "Crash! at #{new_location} (on new map)"
+            @crashed_cart_locations << new_location
+            new_cart_grid.remove_cart_at(new_location)
+          elsif @cart_grid.at(new_location)
+            puts "Crash! at #{new_location} (on old map)"
+            @crashed_cart_locations << new_location
+            @cart_grid.remove_cart_at(new_location)
+          else
+            cart.update_direction(track_at(new_location))
+            new_cart_grid.add_cart(cart)
           end
         end
       end
-
-      @cart_grid = new_cart_grid
     end
+
+    new_cart_grid
+  end
+
+  def find_first_crash
+    original_cart_grid = CartGrid.new(@cart_grid.carts)
+
+    while @crashed_cart_locations.length == 0
+      @cart_grid = play_tick
+    end
+
+    # reset so that this method is idempotent
+    @cart_grid = original_cart_grid
+
+    @crashed_cart_locations.first
   end
 
   private
@@ -211,6 +221,6 @@ class Cart
   end
 end
 
-input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
-map = Map.new(input)
-puts "First crash happened at #{map.find_first_crash}"
+# input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
+# map = Map.new(input)
+# puts "First crash happened at #{map.find_first_crash}"
