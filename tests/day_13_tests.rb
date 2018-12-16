@@ -52,7 +52,36 @@ class MapTest < Minitest::Test
     map.find_first_crash
 
     assert_equal :down, map.cart_at("0,1").direction
+    assert_equal "0,1", map.cart_at("0,1").location
     assert_equal :up, map.cart_at("0,5").direction
+  end
+
+  def test_find_rightward_crash
+    input = [">--<"]
+    map = Map.new(input)
+
+    assert_equal "2,0", map.find_first_crash
+  end
+
+  def test_find_leftward_crash
+    input = [">-<"]
+    map = Map.new(input)
+
+    assert_equal "1,0", map.find_first_crash
+  end
+
+  def test_find_upward_crash
+    input = %w(v | ^)
+    map = Map.new(input)
+
+    assert_equal "0,1", map.find_first_crash
+  end
+
+  def test_find_downward_crash
+    input = %w(v ^)
+    map = Map.new(input)
+
+    assert_equal "0,1", map.find_first_crash
   end
 end
 

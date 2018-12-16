@@ -1,9 +1,10 @@
 require 'pry'
 
 class Map
+  attr_reader :cart_grid
+
   def initialize(input)
     @track_grid = {}
-    @crashed_cart_locations = []
     @cart_grid = CartGrid.new
     @height = input.length
     @width = 0
@@ -37,7 +38,10 @@ class Map
 
   def play_tick
     new_cart_grid = CartGrid.new
+    crashed_cart_locations = []
 
+    # could probably find a way to sort the carts to not have to
+    # loop over all coordinates in order like this
     (0...@height).each do |y|
       (0...@width).each do |x|
         location = "#{x},#{y}"
@@ -49,11 +53,11 @@ class Map
 
           if new_cart_grid.at(new_location)
             puts "Crash! at #{new_location} (on new map)"
-            @crashed_cart_locations << new_location
+            crashed_cart_locations << new_location
             new_cart_grid.remove_cart_at(new_location)
           elsif @cart_grid.at(new_location)
             puts "Crash! at #{new_location} (on old map)"
-            @crashed_cart_locations << new_location
+            crashed_cart_locations << new_location
             @cart_grid.remove_cart_at(new_location)
           else
             cart.update_direction(track_at(new_location))
@@ -63,20 +67,21 @@ class Map
       end
     end
 
-    new_cart_grid
+    [crashed_cart_locations, new_cart_grid]
   end
 
   def find_first_crash
     original_cart_grid = CartGrid.new(@cart_grid.carts)
+    crashed_cart_locations = []
 
-    while @crashed_cart_locations.length == 0
-      @cart_grid = play_tick
+    while crashed_cart_locations.length == 0
+      crashed_cart_locations, @cart_grid = play_tick
     end
 
     # reset so that this method is idempotent
     @cart_grid = original_cart_grid
 
-    @crashed_cart_locations.first
+    crashed_cart_locations.first
   end
 
   private
@@ -105,7 +110,7 @@ class CartGrid
   attr_reader :carts
 
   def initialize(carts = {})
-    @carts = carts.dup
+    @carts = Hash[carts.map { |location, cart| [location, cart.dup] }]
   end
 
   def at(location)
