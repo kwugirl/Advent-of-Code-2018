@@ -83,6 +83,21 @@ class MapTest < Minitest::Test
 
     assert_equal "0,1", map.find_first_crash
   end
+
+  def test_find_last_cart_standing
+    example = [
+      "/>-<\\  ",
+      "|   |  ",
+      "| /<+-\\",
+      "| | | v",
+      "\\>+</ |",
+      "  |   ^",
+      "  \\<->/"
+    ]
+    map = Map.new(example)
+
+    assert_equal "6,4", map.find_last_cart_standing
+  end
 end
 
 class CartTest < Minitest::Test

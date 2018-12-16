@@ -84,6 +84,15 @@ class Map
     crashed_cart_locations.first
   end
 
+  def find_last_cart_standing
+    while @cart_grid.count > 1
+      crashed_cart_locations, @cart_grid = play_tick
+      # puts "Cart crashes in the last tick: #{crashed_cart_locations}"
+    end
+
+    @cart_grid.cart_locations.first
+  end
+
   private
 
   def print_map(carts = @cart_grid)
@@ -123,6 +132,14 @@ class CartGrid
 
   def add_cart(cart)
     @carts[cart.location] = cart
+  end
+
+  def count
+    @carts.count
+  end
+
+  def cart_locations
+    @carts.keys
   end
 end
 
@@ -226,6 +243,7 @@ class Cart
   end
 end
 
-# input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
-# map = Map.new(input)
-# puts "First crash happened at #{map.find_first_crash}"
+input = File.readlines('inputs/day_13.txt').map { |line| line.chomp }
+map = Map.new(input)
+puts "First crash happened at #{map.find_first_crash}"
+puts "Last cart standing is at #{map.find_last_cart_standing}"
